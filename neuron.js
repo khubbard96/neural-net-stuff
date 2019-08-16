@@ -1,6 +1,7 @@
 exports.Axon = class Axon {
     constructor(inNeuron, outNeuron, weight) {
         this._weight = weight;
+        this._input = 0;
         this._id = this._createUUID();
         this._inputSource = inNeuron;
         this._outputDestination = outNeuron;
@@ -17,6 +18,13 @@ exports.Axon = class Axon {
     getID() {
         return this._id;
     }
+
+    setInput(x) {
+        this._input = x;
+        this._outputDestination.update();
+    }
+    getResult() {return this._value * this._weight;}
+
     setInputNeuron(inNeuron) {
         if (typeof inNeuron == typeof Neuron) {
             this._inputSource = inNeuron;
@@ -48,13 +56,22 @@ class Neuron {
     constructor() {
         this._inputAxons = [];
         this._outputAxons = [];
+        this._outputValue = 0
     }
     _sigmoid(x) {
         return 1 / (1 + Math.exp(-x));
     }
-
     _sigmoidDerivative(x) {
         return x * (1 - x);
+    }
+    getOutput() {
+        return this._outputValue;
+    }
+    update() {
+        let result = 0;
+        this._inputAxons.forEach((axon) => { result += axon.getResult();});
+        this._outputValue = result;
+        this._outputAxons.forEach((axon) => {axon.setInput(result);});
     }
 }
 
@@ -73,8 +90,20 @@ exports.HiddenNeuron = class HiddenNeuron extends Neuron {
         super(...args);
     }
 }
+
+//synthetic axons are used to programatically put values into inputneurons, 
+//or get values from output neurons. These have a one-to-one relation, in that
+//each neuron can have only 1 synthetic axon attached to it
 exports.SyntheticAxon = class SyntheticAxon extends Axon {
     constructor(...args){
-        super(...args);
+        super(...args); 
+        this.pullFunction = undefined;
+    }
+    setPuller(pullFunction) {
+        this.pullFunction = pullFunction;
+    }
+    pullInput() {
+        if(this.pullFunction) return this.pullFunction();
+        else return 0;
     }
 }

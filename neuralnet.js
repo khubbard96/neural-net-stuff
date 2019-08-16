@@ -1,6 +1,6 @@
 const {InputNeuron, OutputNeuron, HiddenNeuron, Axon} = require("./neuron.js");
 
-class NeuralNetwork {
+exports.NeuralNetwork = class NeuralNetwork {
     constructor() {
         this.neurons = [];
         this._inputNeurons = [];
