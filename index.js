@@ -1,5 +1,6 @@
 const electron = require('electron');
 const Game = require("./snake.js").Game;
+const ipc = require("electron").ipcRenderer;
 
 const { app, BrowserWindow } = require('electron');
 
@@ -13,10 +14,10 @@ function createWindow () {
     });
 
     win.loadFile('index.html');
+    win.webContents.openDevTools();
     win.on('closed', () => {
         win = null;
     });
-    startGame();
 }
 
 app.on('ready', createWindow);
@@ -33,7 +34,3 @@ app.on('activate', () => {
     }
 });
 
-function startGame() {
-    const game = new Game();
-    game.running = true;
-}

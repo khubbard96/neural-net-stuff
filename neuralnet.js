@@ -54,9 +54,15 @@ exports.NeuralNetwork = class NeuralNetwork {
             this._hiddenNeurons.push(thisLevel);
         }
     }
+    createSimilarNetwork() {
+        //creates a 'similar' neural network, where all axons have their values adjusted a random amount
+        //up or down, between 0 and 0.05
+        let maximumAdjustment = 0.05;
+        
+    }
     _createRandomWeight() {
         return 2.0 * Math.random() - 1;
     }
 }
 
-console.log(new NeuralNetwork());
+//console.log(new exports.NeuralNetwork());

@@ -47,6 +47,17 @@ exports.Axon = class Axon {
             return v.toString(16);
         });
     }
+    getSimilarWeight() {
+        //let derivative = Math.asin(this._weight);
+/*         let inverse = Math.log((this._weight) / (1 - this._weight));
+        let change = ((Math.random() * 2) - 1) * 0.05;
+        return  */
+        let x = (this._weight / 2) + 0.5
+        let inverseVal = Math.log(x/(1-x)); //modified logit
+        let change = ((Math.random() * 2) - 1) * 0.05;
+        let modified = inverseVal + change;
+        return ( ( 1 / (1 + Math.pow(Math.E, -modified)) ) - 0.5) * 2
+    }
 
 }
 //Neuron class
@@ -94,10 +105,11 @@ exports.HiddenNeuron = class HiddenNeuron extends Neuron {
 //synthetic axons are used to programatically put values into inputneurons, 
 //or get values from output neurons. These have a one-to-one relation, in that
 //each neuron can have only 1 synthetic axon attached to it
-exports.SyntheticAxon = class SyntheticAxon extends Axon {
+exports.SyntheticAxon = class SyntheticAxon extends exports.Axon {
     constructor(...args){
         super(...args); 
         this.pullFunction = undefined;
+        this.weight = 1;
     }
     setPuller(pullFunction) {
         this.pullFunction = pullFunction;
