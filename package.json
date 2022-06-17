@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/khubbard96/neural-net-stuff#readme",
   "devDependencies": {
-    "electron": "^6.0.2"
+    "electron": "^15.5.5"
   }
 }
